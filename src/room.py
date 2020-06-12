@@ -8,6 +8,7 @@ class Room:
         self.w_to = None
         self.s_to = None
         self.e_to = None
+        self.loot = []
 
     def __str__(self):
         output = f'{self.name}: {self.description}\n'
@@ -21,3 +22,13 @@ class Room:
             output += 'To the west is: ' + self.w_to.name + '\n'
 
         return output
+
+    def add_item(self, item):
+        self.loot.append(item)
+
+    def remove_item(self, item):
+        self.loot.remove(item)
+
+    def show_items(self):
+        for item in self.loot:
+            return f"There is an item in the room. {item.name}: {item.description}"
