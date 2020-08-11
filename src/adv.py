@@ -1,4 +1,6 @@
 from room import Room
+from player import Player
+from item import Item
 
 # Declare all the rooms
 
@@ -21,7 +23,6 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
 
-
 # Link rooms together
 
 room['outside'].n_to = room['foyer']
@@ -33,19 +34,93 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
-#
-# Main
-#
 
-# Make a new player object that is currently in the 'outside' room.
+# Declaring Items
 
-# Write a loop that:
-#
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
+items = {
+    'coins': Item('Galleons', 'Golden Coins'),
+    'sword': Item('Sword', 'Steel blade'),
+    'shield': Item('Shield', 'Wooden protection'),
+    'wand': Item('Wand', 'Magical Wand'),
+    'materia': Item('Materia', 'Powers unknown')
+}
+
+# Link items to rooms
+
+room['outside'].add_item(items['coins'])
+room['foyer'].add_item(items['sword'])
+room['overlook'].add_item(items['shield'])
+room['treasure'].add_item(items['materia'])
+room['narrow'].add_item(items['wand'])
+
+
+name = input('What is your name, Adventurer? ')
+player = Player(name, room['outside'])
+# player.current_room = room['outside']
+print(player.current_room)
+print(room['outside'].show_items())
+running = True
+while running:
+    # Prints the current room name
+    print(player.current_room.name)
+    # Prints the current description
+    print(player.current_room.description)
+    # Prints current inventory
+    print(player.current_room)
+
+    # Waits for user input and decides what to do.
+    input_var = input("type a direction ")
+
+# A shorter way
+
+   # if input_var in {'n', 'w', 's', 'e'}:
+   #     if hasattr(player.current_room, f'{input_var}_to'):
+   #         player.current_room = getattr(
+   #             player.current_room, f'{input_var}_to')
+
+# check if the current room is this attritbute
+
+    if input_var == 'n':
+        direction = player.current_room.n_to
+        if direction == None:
+            print("Can't go that way")
+        else:
+            # move the player to that room
+            player = Player(name, direction)
+
+            print(player)
+            print(player.current_room.show_items())
+
+    elif input_var == 'w':
+        direction = player.current_room.w_to
+        if direction == None:
+            print("Can't go that way")
+        else:
+            player = Player(name, direction)
+
+            print(player)
+            print(player.current_room.show_items())
+
+    elif input_var == 's':
+        direction = player.current_room.s_to
+        if direction == None:
+            print("Can't go that way")
+        else:
+            player = Player(name, direction)
+
+            print(player)
+            print(player.current_room.show_items())
+
+    elif input_var == 'e':
+        direction = player.current_room.e_to
+        if direction == None:
+            print("Can't go that way")
+        else:
+            player = Player(name, direction)
+
+            print(player)
+            print(player.current_room.show_items())
+
+    elif input_var == 'q':
+        print('See you later')
+        running = False
